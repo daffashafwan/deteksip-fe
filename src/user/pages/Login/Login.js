@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import '../../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom';
+import '../../../App.css';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
     //const navigate = useNavigate();
@@ -13,12 +15,13 @@ const Login = () => {
     });
     return (
         <>
-            <Container>
-                <h1 className="shadow-sm text-success mt-5 p-3 text-center rounded">Admin Login</h1>
-                <Row className="mt-5">
-                    <Col lg={5} md={6} sm={12} className="p-5 m-auto shadow-sm rounded-lg">
+            <Container className="background h-100">
+                <Row className="mt-5 p-5">
+                    <Col lg={5} md={6} sm={12} className="bg-white p-5 m-auto shadow-lg card-primer">
+                        <h1 className="text-primer text-center">Akses Akun Anda</h1>
+                        <h5 className="text-dark text-center">Login Sebagai Pengguna</h5>
                         <Form>
-                            <Form.Group className="m-1" controlId="formBasicUsername">
+                            <Form.Group className="m-1 mt-5" controlId="formBasicUsername">
                                 <Form.Control value={formState.username} onChange={(e) =>
                                     setFormState({
                                         ...formState,
@@ -27,7 +30,7 @@ const Login = () => {
                                 } type="text" placeholder="Enter Username" />
                             </Form.Group>
 
-                            <Form.Group className="m-1" controlId="formBasicPassword">
+                            <Form.Group className="m-1 mt-5" controlId="formBasicPassword">
                                 <Form.Control value={formState.password} onChange={(e) =>
                                     setFormState({
                                         ...formState,
@@ -35,10 +38,10 @@ const Login = () => {
                                     })
                                 } type="password" placeholder="Enter Password" />
                             </Form.Group>
-
-                            <Button className="m-1" variant="success btn-block" type="submit">
-                                Login
+                            <Button className="m-1 mt-5 btn-primer text-white w-100" variant="btn-block" type="submit">
+                                Masuk
                             </Button>
+                            <Link style={{ textDecoration: 'none' }} to="/admin"><h5 className="text-dark text-center mt-3">Login Sebagai <span className="text-primer">Admin</span> </h5></Link>
                         </Form>
                     </Col>
                 </Row>

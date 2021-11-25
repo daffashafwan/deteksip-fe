@@ -36,3 +36,23 @@
     transform: rotate(360deg);
   }
 }
+
+.background{
+  background-color: #FCC9B3;
+}
+
+.text-primer{
+  color: #F97BA3;
+}
+
+.btn-primer{
+  color: #FFFFFF;
+  background-color: #F97BA3 !important;
+  border-radius: 16px;
+}
+
+.card-primer{
+  border-radius: 16px;
+}
+
+
