@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import './App.css';
-import { BrowserRouter as Router, Route, Routes, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LoginAdmin from './admin/pages/Login';
 import LoginUser from './user/pages/Login';
 import SoalAdmin from './admin/pages/Soal';

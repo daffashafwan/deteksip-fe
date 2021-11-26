@@ -1,7 +1,7 @@
 import React from "react";
 import { useQuery } from "@apollo/client";
 import Soal from './Soal';
-import { READ_SOAL, DELETE_SOAL } from "../../../../../graphql/queries";
+import { READ_SOAL } from "../../../../../graphql/queries";
 import './SoalList.css';
 
 const SoalList = () => {

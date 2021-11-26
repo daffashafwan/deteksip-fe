@@ -45,6 +45,10 @@ class Speech extends Component {
             recognition.stop()
             recognition.onend = () => {
                 console.log("Stopped listening per click");
+                if (!(document.getElementById('final').innerHTML.replace(" ", ""))) {
+                    alert('Suara Tidak Jelas');
+                    this.props.parentCallback(null);
+                }
                 if (document.getElementById('final').innerHTML.replace(" ", "") === this.props.name) {
                     alert('jawaban benar');
                     this.props.parentCallback("benar");

@@ -49,3 +49,25 @@ export const DELETE_SOAL = gql`
         }
     }
 `
+
+export const READ_USER = gql`
+  query tebaggambar {
+    user {
+        user_id
+        user_nama
+        user_password
+        user_username
+    }
+  }
+`
+
+export const READ_CHILD = gql`
+  query tebaggambar {
+    child {
+      child_id
+      child_nama
+      child_password
+      child_username
+    }
+  }
+`

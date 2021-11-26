@@ -1,29 +1,49 @@
 import React, { useState } from 'react';
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import '../../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import { useCookies } from 'react-cookie'
+import { READ_USER } from "../../../graphql/queries";
+import { useQuery } from "@apollo/client";
+import Swal from "sweetalert2";
+import { bake_cookie } from 'sfcookies';
 import '../../../App.css';
 import { Link, useNavigate } from 'react-router-dom';
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 
 
 const Login = () => {
-    //const navigate = useNavigate();
-    const [cookies, setCookie] = useCookies(['access_token', 'refresh_token'])
+    const navigate = useNavigate();
+    const cookie_key = 'admin_cred';
+    const { loading, error, data } = useQuery(READ_USER);
     const [formState, setFormState] = useState({
         login: true,
         username: '',
         password: '',
         name: ''
     });
+    const HandleInput = () => {
+        data.user.forEach((k, v) => {
+            if (k.user_username === formState.username && k.user_password === formState.password) {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Berhasil Login',
+                    showConfirmButton: false,
+                    timer: 1200
+                });
+                bake_cookie(cookie_key, k.user_id);
+                setTimeout(function () {
+                    navigate('/admin/soal');
+                }, 1500)
 
-    async function onSubmit(values) {
-        const response = 1;
-    
-        let expires = new Date()
-        expires.setTime(expires.getTime() + (response.data.expires_in * 1000))
-        setCookie('access_token', response.data.access_token, { path: '/',  expires})
-        setCookie('refresh_token', response.data.refresh_token, {path: '/', expires})
+            } else {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'warning',
+                    title: 'Gagal Login, Silahkan Cek Kredensial Anda',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            }
+        })
     }
 
     return (
@@ -52,7 +72,7 @@ const Login = () => {
                                     })
                                 } type="password" placeholder="Enter Password" />
                             </Form.Group>
-                            <Button className="m-1 mt-5 btn-primer text-white w-100" variant="btn-block" type="submit">
+                            <Button className="m-1 mt-5 btn-primer text-white w-100" variant="btn-block" onClick={HandleInput}>
                                 Masuk
                             </Button>
                             <Link style={{ textDecoration: 'none' }} to="/user/login"><h5 className="text-dark text-center mt-3">Login Sebagai <span className="text-primer">Pengguna</span> </h5></Link>
