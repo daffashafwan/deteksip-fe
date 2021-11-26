@@ -31,7 +31,7 @@ class Speech extends Component {
     }
 
     handleListen() {
-
+        console.log(this.props.name);
         console.log('listening?', this.state.listening)
 
         if (this.state.listening) {

@@ -12,6 +12,7 @@ const Quiz = (props) => {
     const [result, setResult] = useState("");
     const [counter, setCounter] = useState(0);
     const [showScore, setShowScore] = useState(false);
+    const [start, setStart] = useState(false);
     const [score, setScore] = useState(0);
     const callbackFunction = (childData) => {
         setResult(childData);
@@ -24,6 +25,35 @@ const Quiz = (props) => {
         }
     });
 
+    const HandleStart = () =>{
+        setStart(true);
+    }
+
+    const HandleRestart = () =>{
+        setScore(0);
+        setResult("");
+        setCurrentQuestion(0);
+        setCounter(0);
+        setShowScore(false);
+        setStart(false);
+    }
+
+    if (start === false) {
+        return (
+            <>
+                <Container className="background h-100">
+                    <Row className="mt-5 p-5">
+                        <Col lg={5} md={6} sm={12} className="bg-white p-5 m-auto shadow-lg card-primer">
+                            <h1 className="text-primer text-center">Quiz Menyenangkan</h1>
+                            <Button onClick={HandleStart} className="m-1 mt-5 text-white w-100" variant="success btn-block" type="submit">
+                                Mulai Quiz
+                            </Button>
+                        </Col>
+                    </Row>
+                </Container>
+            </>
+        );
+    }
     const HandleAnswer = (isCorrect) => {
         if (isCorrect === 'benar') {
             setScore(score + 1);
@@ -50,30 +80,49 @@ const Quiz = (props) => {
         console.log(error);
         return <div className="tasks">Error !</div>;
     }
-    
-    return (
-        <>
-            <Container className="background h-100">
-                <Row className="mt-5 p-5">
-                    <Col lg={5} md={6} sm={12} className="bg-white p-5 m-auto shadow-lg card-primer">
-                        <div className='question-section'>
-                            <div className='question-count'>
-                                <span>Question {currentQuestion + 1}</span>/{data.soal.length}
+
+    if (showScore) {
+        return (
+            <>
+                <Container className="background h-100">
+                    <Row className="mt-5 p-5">
+                        <Col lg={5} md={6} sm={12} className="bg-white p-5 m-auto shadow-lg card-primer">
+                            <div className='score-section'>
+                                Skor Antum {score} dari {data.soal.length}
                             </div>
-                            <div className='question-count'>
-                                <span>Attempt {counter + 1}</span>/3
+                            <Button onClick={HandleRestart} className="m-1 mt-5 text-white w-100" variant="danger btn-block" type="submit">
+                                Coba Lagi Kawan
+                            </Button>
+                        </Col>
+                    </Row>
+                </Container>
+            </>
+        );
+    } else {
+        return (
+            <>
+                <Container className="background h-100">
+                    <Row className="mt-5 p-5">
+                        <Col lg={5} md={6} sm={12} className="bg-white p-5 m-auto shadow-lg card-primer">
+                            <div className='question-section'>
+                                <div className='question-count'>
+                                    <span>Question {currentQuestion + 1}</span>/{data.soal.length}
+                                </div>
+                                <div className='question-count'>
+                                    <span>Attempt {counter + 1}</span>/3
+                                </div>
+                                <div className='question-text mt-5'><img alt="sabar" width="200" src={data.soal[currentQuestion].soal_url} /></div>
+                                {/* <div className='question-text'>{data.soal[currentQuestion].soal_soal}</div> */}
                             </div>
-                            <div className='question-text mt-5'><img alt="sabar" width="200" src={data.soal[currentQuestion].soal_url} /></div>
-                            {/* <div className='question-text'>{data.soal[currentQuestion].soal_soal}</div> */}
-                        </div>
-                        <div className='answer-section'>
-                            <Speech name={data.soal[currentQuestion].soal_soal} parentCallback={callbackFunction} />
-                        </div>
-                    </Col>
-                </Row>
-            </Container>
-        </>
-    );
+                            <div className='answer-section'>
+                                <Speech name={data.soal[currentQuestion].soal_soal} parentCallback={callbackFunction} />
+                            </div>
+                        </Col>
+                    </Row>
+                </Container>
+            </>
+        );
+    }
 }
 
 export default Quiz;
