@@ -27,7 +27,7 @@ const Login = () => {
     }
 
     return (
-        
+
         <>
             <Container className="background h-100">
                 <Row className="mt-5 p-5">
@@ -55,7 +55,7 @@ const Login = () => {
                             <Button className="m-1 mt-5 btn-primer text-white w-100" variant="btn-block" type="submit">
                                 Masuk
                             </Button>
-                            <Link style={{ textDecoration: 'none' }} to="/user"><h5 className="text-dark text-center mt-3">Login Sebagai <span className="text-primer">Pengguna</span> </h5></Link>
+                            <Link style={{ textDecoration: 'none' }} to="/user/login"><h5 className="text-dark text-center mt-3">Login Sebagai <span className="text-primer">Pengguna</span> </h5></Link>
                         </Form>
                     </Col>
                 </Row>

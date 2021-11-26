@@ -41,7 +41,7 @@ const Login = () => {
                             <Button className="m-1 mt-5 btn-primer text-white w-100" variant="btn-block" type="submit">
                                 Masuk
                             </Button>
-                            <Link style={{ textDecoration: 'none' }} to="/admin"><h5 className="text-dark text-center mt-3">Login Sebagai <span className="text-primer">Admin</span> </h5></Link>
+                            <Link style={{ textDecoration: 'none' }} to="/admin/login"><h5 className="text-dark text-center mt-3">Login Sebagai <span className="text-primer">Admin</span> </h5></Link>
                         </Form>
                     </Col>
                 </Row>
