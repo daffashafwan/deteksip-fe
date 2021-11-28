@@ -31,7 +31,7 @@ const Login = () => {
                 });
                 bake_cookie(cookie_key, k.child_id);
                 setTimeout(function () {
-                    navigate('/admin/soal');
+                    navigate('/user/quiz');
                 }, 1500)
 
             } else {

@@ -4,7 +4,6 @@ import Login from './pages/Login';
 import Soal from './pages/Soal';
 
 const Admin = () => {
-
     return (
         <Soal/>
     );

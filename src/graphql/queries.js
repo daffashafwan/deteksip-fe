@@ -1,15 +1,15 @@
-import React, { useState } from "react";
 import { gql } from "@apollo/client";
 
 
 export const CREATE_SOAL = gql`
-  mutation($soal: String!, $url: String!) {
-    insert_soal(objects: { soal_soal: $soal,  soal_url: $url}) {
+  mutation($soal: String!, $url: String!, $hint: String!) {
+    insert_soal(objects: { soal_soal: $soal,  soal_url: $url, soal_hint: $hint}) {
         affected_rows
         returning{
             soal_id
             soal_soal
             soal_url
+            soal_hint
         }
     }
   }
@@ -21,20 +21,36 @@ export const READ_SOAL = gql`
         soal_id
         soal_soal
         soal_url
+        soal_hint
     }
   }
 `
 
 export const UPDATE_SOAL = gql`
-  mutation($id: Int!, $soal: String!, $url: String!) {
-    update_soal_by_pk(
-      pk_columns: {soal_id: $id }
-      _set: { soal_soal: $soal, soal_url: $url }
-    ) {
-      soal_id
-    }
+  mutation($id: Int!, $soal: String!, $url: String!, $hint: String!) {
+    update_soal(
+      where: {
+          soal_id: {
+          _eq: $id
+          }
+      }, 
+      _set: {
+        soal_hint: $hint, 
+        soal_id: $id, 
+        soal_soal: $soal, 
+        soal_url: $url}
+      ) {
+      affected_rows
+      returning{
+        soal_id
+        soal_soal
+        soal_url
+        soal_hint
+      }
+      }
   }
 `
+
 
 export const DELETE_SOAL = gql`
     mutation ($soal_id: Int) {

@@ -1,0 +1,92 @@
+import React, { useEffect, useContext } from "react";
+import { useQuery, useMutation } from "@apollo/client";
+import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
+import BootstrapTable from 'react-bootstrap-table-next';
+import { READ_SOAL, DELETE_SOAL } from "../../../../../graphql/queries";
+import { SoalContext } from "../../contexts/SoalContext";
+
+const SoalTable = () => {
+  const { loading, error, data } = useQuery(READ_SOAL);
+  const [deleteSoalMutation] = useMutation(DELETE_SOAL);
+  const { onEdit,formStateContext, setOnEdit, setFormStateContext } = useContext(SoalContext);
+
+  const HandleDelete = (soal_id) => {
+    deleteSoalMutation({
+      variables: { soal_id: soal_id },
+      optimisticResponse: true,
+      update: (cache) => {
+        const existingSoal = cache.readQuery({ query: READ_SOAL });
+        const soals = { soal: existingSoal.soal.filter((t) => t.soal_id !== soal_id) }
+        //console.log(soals);
+        cache.writeQuery({
+          query: READ_SOAL,
+          data: soals
+        });
+      },
+    });
+  };
+
+  const HandleEdit = (soal_id) => {
+    setOnEdit(true);
+    data.soal.forEach((k, v) => {
+      if (k.soal_id === soal_id) {
+        setFormStateContext({
+          id: k.soal_id,
+          soal: k.soal_soal,
+          url: k.soal_url,
+          hint: k.soal_hint,
+        })
+      }
+    })
+  };
+
+  const columns = [{
+    dataField: 'soal_id',
+    text: 'Soal ID'
+  }, {
+    dataField: 'soal_soal',
+    text: 'Soal'
+  }
+    , {
+    dataField: 'soal_hint',
+    text: 'Hint'
+  }
+    , {
+    dataField: "remove",
+    text: "Delete",
+    formatter: (cellContent, row) => {
+      return (
+        <div>
+          <button
+            className="btn btn-primary btn-xs"
+            onClick={() => HandleEdit(row.soal_id)}
+          >
+            Edit
+          </button>
+          <button
+            className="btn btn-danger btn-xs"
+            onClick={() => HandleDelete(row.soal_id)}
+          >
+            Delete
+          </button>
+        </div>
+      );
+    },
+  },
+  ];
+
+  if (loading) {
+    return <div className="tasks">Loading...</div>;
+  }
+  if (error) {
+    console.log(error);
+    return <div className="tasks">Error !</div>;
+  }
+  return (
+    <div className="SoalList">
+      <BootstrapTable wrapperClasses="table-responsive" keyField='soal_id' data={data.soal} columns={columns} />
+    </div>
+  );
+}
+
+export default SoalTable;

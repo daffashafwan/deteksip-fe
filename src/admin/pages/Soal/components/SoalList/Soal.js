@@ -1,12 +1,13 @@
 import React from "react";
 import { useMutation } from "@apollo/client";
 import './Soal.css';
-import { READ_SOAL, DELETE_SOAL } from "../../../../../graphql/queries";
+import { READ_SOAL, DELETE_SOAL, UPDATE_SOAL } from "../../../../../graphql/queries";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 
 
 const Soal = ({ soal }) => {
     const [deleteSoalMutation] = useMutation(DELETE_SOAL);
+    //const [updateSoalMutation] = useMutation(UPDATE_SOAL);
   
     //const toggleCompleted = ({ soal_id, completed }) => {};
   
@@ -30,6 +31,9 @@ const Soal = ({ soal }) => {
     <>
       <div key={soal.soal_id} className="btn btn-dark soal m-4">
         <span>{soal.soal_soal}</span>
+        <Button type="submit" onClick={() => deleteSoal(soal.soal_id)}>
+          Edit
+        </Button>
         <Button type="submit" onClick={() => deleteSoal(soal.soal_id)}>
           remove
         </Button>
