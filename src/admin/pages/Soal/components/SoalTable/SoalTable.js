@@ -4,11 +4,12 @@ import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import BootstrapTable from 'react-bootstrap-table-next';
 import { READ_SOAL, DELETE_SOAL } from "../../../../../graphql/queries";
 import { SoalContext } from "../../contexts/SoalContext";
+import Swal from "sweetalert2";
 
 const SoalTable = () => {
   const { loading, error, data } = useQuery(READ_SOAL);
   const [deleteSoalMutation] = useMutation(DELETE_SOAL);
-  const { onEdit,formStateContext, setOnEdit, setFormStateContext } = useContext(SoalContext);
+  const { onEdit, formStateContext, setOnEdit, setFormStateContext } = useContext(SoalContext);
 
   const HandleDelete = (soal_id) => {
     deleteSoalMutation({
@@ -40,6 +41,20 @@ const SoalTable = () => {
     })
   };
 
+  const HandlePreview = (soal_id) => {
+    data.soal.forEach((k, v) => {
+      if (k.soal_id === soal_id) {
+        Swal.fire({
+          imageUrl: k.soal_url,
+          imageHeight: 100,
+          title: k.soal_soal,
+          text: k.soal_hint,
+          imageAlt: 'A tall image'
+        })
+      }
+    })
+  }
+
   const columns = [{
     dataField: 'soal_id',
     text: 'Soal ID'
@@ -58,13 +73,19 @@ const SoalTable = () => {
       return (
         <div>
           <button
-            className="btn btn-primary btn-xs"
+            className="m-2 btn btn-warning btn-xs"
+            onClick={() => HandlePreview(row.soal_id)}
+          >
+            Preview
+          </button>
+          <button
+            className="m-2 btn btn-primary btn-xs"
             onClick={() => HandleEdit(row.soal_id)}
           >
             Edit
           </button>
           <button
-            className="btn btn-danger btn-xs"
+            className="m-2 btn btn-danger btn-xs"
             onClick={() => HandleDelete(row.soal_id)}
           >
             Delete
