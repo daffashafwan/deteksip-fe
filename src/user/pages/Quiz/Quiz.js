@@ -9,12 +9,14 @@ import { useNavigate } from 'react-router-dom';
 import { read_cookie, delete_cookie } from 'sfcookies';
 
 
-const Quiz = (props) => {
+const Quiz = () => {
     const navigate = useNavigate();
     const { loading, error, data } = useQuery(READ_SOAL);
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [result, setResult] = useState("");
     const [counter, setCounter] = useState(0);
+    const [hintIndex, setHintIndex] = useState(0);
+    const [hintDisabled, setHintDisabled] = useState(false);
     const [showScore, setShowScore] = useState(false);
     const [start, setStart] = useState(false);
     const [score, setScore] = useState(0);
@@ -22,7 +24,7 @@ const Quiz = (props) => {
         setResult(childData);
     };
 
-    const HandleLogout = () =>{
+    const HandleLogout = () => {
         delete_cookie('user_cred');
         Swal.fire({
             position: 'top-end',
@@ -31,27 +33,25 @@ const Quiz = (props) => {
             showConfirmButton: false,
             timer: 1200
         });
-        setTimeout(function(){
+        setTimeout(function () {
             navigate('/user/login');
         }, 1500)
     };
 
     useEffect(() => {
-        console.log(result);
-        if(read_cookie('user_cred').length < 1){
+        if (read_cookie('user_cred').length < 1) {
             navigate('/user/login');
         }
         if (result) {
-            console.log('woi');
             HandleAnswer(result)
         }
     });
 
-    const HandleStart = () =>{
+    const HandleStart = () => {
         setStart(true);
     }
 
-    const HandleRestart = () =>{
+    const HandleRestart = () => {
         setScore(0);
         setResult("");
         setCurrentQuestion(0);
@@ -63,8 +63,8 @@ const Quiz = (props) => {
     if (start === false) {
         return (
             <>
-                <Container className="background h-100">
-                    <Row className="mt-5 p-5">
+                <Container className="h-100">
+                    <Row className="mt-5">
                         <Col lg={5} md={6} sm={12} className="bg-white p-5 m-auto shadow-lg card-primer">
                             <Button className="text-center" onClick={HandleLogout} >Logout</Button>
                             <h1 className="text-primer text-center">Quiz Menyenangkan</h1>
@@ -91,12 +91,28 @@ const Quiz = (props) => {
             const nextQuestion = currentQuestion + 1;
             if (nextQuestion < data.soal.length) {
                 setCurrentQuestion(nextQuestion);
+                setHintDisabled(false);
                 setCounter(0);
+                setHintIndex(0)
             } else {
                 setShowScore(true);
             }
         }
     };
+    const HandleHint = () => {
+        var hint = data.soal[currentQuestion].soal_hint.split(';');
+        console.log(hint);
+        Swal.fire({
+            position: 'top-end',
+            text: hint[hintIndex],
+            showConfirmButton: false,
+            timer: 1500
+        });
+        setHintIndex(hintIndex + 1);
+        if (hintIndex >= hint.length - 1) {
+            setHintDisabled(true);
+        }
+    }
     if (loading) {
         return <div className="tasks">Loading...</div>;
     }
@@ -108,7 +124,7 @@ const Quiz = (props) => {
     if (showScore) {
         return (
             <>
-                <Container className="background h-100">
+                <Container className="h-100">
                     <Row className="mt-5 p-5">
                         <Col lg={5} md={6} sm={12} className="bg-white p-5 m-auto shadow-lg card-primer">
                             <Button className="text-center" onClick={HandleLogout} >Logout</Button>
@@ -126,18 +142,27 @@ const Quiz = (props) => {
     } else {
         return (
             <>
-                <Container className="background h-100">
+                <Container className="h-100">
                     <Row className="mt-5 p-5">
                         <Col lg={5} md={6} sm={12} className="bg-white p-5 m-auto shadow-lg card-primer">
-                            <Button className="text-center" onClick={HandleLogout} >Logout</Button>
                             <div className='question-section'>
-                                <div className='question-count'>
-                                    <span>Question {currentQuestion + 1}</span>/{data.soal.length}
+                                <div className="row">
+                                    <div className="col-4">
+                                        <Button className="text-center" onClick={HandleLogout} >Logout</Button>
+                                    </div>
+                                    <div className="col-4">
+                                        <div className='question-count'>
+                                            <span>Question {currentQuestion + 1}</span>/{data.soal.length}
+                                        </div>
+                                        <div className='question-count'>
+                                            <span>Attempt {counter + 1}</span>/3
+                                        </div>
+                                    </div>
+                                    <div className="col-4">
+                                        <Button onClick={HandleHint} className={hintDisabled ? `text-center btn-hint disabled` : `text-center btn-hint`} variant="warning">Hint</Button>
+                                    </div>
                                 </div>
-                                <div className='question-count'>
-                                    <span>Attempt {counter + 1}</span>/3
-                                </div>
-                                <div className='question-text mt-5'><img alt="sabar" width="200" src={data.soal[currentQuestion].soal_url} /></div>
+                                <div className='question-text mt-5 text-center'><img alt="sabar" width="200" src={data.soal[currentQuestion].soal_url} /></div>
                                 {/* <div className='question-text'>{data.soal[currentQuestion].soal_soal}</div> */}
                             </div>
                             <div className='answer-section'>

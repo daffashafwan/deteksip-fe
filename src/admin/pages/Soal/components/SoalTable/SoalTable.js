@@ -12,19 +12,37 @@ const SoalTable = () => {
   const { onEdit, formStateContext, setOnEdit, setFormStateContext } = useContext(SoalContext);
 
   const HandleDelete = (soal_id) => {
-    deleteSoalMutation({
-      variables: { soal_id: soal_id },
-      optimisticResponse: true,
-      update: (cache) => {
-        const existingSoal = cache.readQuery({ query: READ_SOAL });
-        const soals = { soal: existingSoal.soal.filter((t) => t.soal_id !== soal_id) }
-        //console.log(soals);
-        cache.writeQuery({
-          query: READ_SOAL,
-          data: soals
+
+    Swal.fire({
+      title: 'Antum yakin Mau Hapus ?',
+      text: "Ntar input lagi lho kalo dihapus",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'Tidak',
+      confirmButtonText: 'Iya'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteSoalMutation({
+          variables: { soal_id: soal_id },
+          optimisticResponse: true,
+          update: (cache) => {
+            const existingSoal = cache.readQuery({ query: READ_SOAL });
+            const soals = { soal: existingSoal.soal.filter((t) => t.soal_id !== soal_id) }
+            cache.writeQuery({
+              query: READ_SOAL,
+              data: soals
+            });
+          },
         });
-      },
-    });
+        Swal.fire(
+          'Terhapus',
+          'Sudah Terhapus, nda bisa',
+          'success'
+        )
+      }
+    })
   };
 
   const HandleEdit = (soal_id) => {
@@ -97,11 +115,10 @@ const SoalTable = () => {
   ];
 
   if (loading) {
-    return <div className="tasks">Loading...</div>;
+    return <div>Loading...</div>;
   }
   if (error) {
-    console.log(error);
-    return <div className="tasks">Error !</div>;
+    return <div>Error !</div>;
   }
   return (
     <div className="SoalList">

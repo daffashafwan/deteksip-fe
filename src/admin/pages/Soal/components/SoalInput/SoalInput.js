@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useMutation } from "@apollo/client";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import { CREATE_SOAL, READ_SOAL, UPDATE_SOAL } from "../../../../../graphql/queries";
 import { SoalContext } from '../../contexts/SoalContext';
 
@@ -52,8 +52,6 @@ const SoalInput = () => {
 
     const HandleReset = () =>{
         setOnEdit(false);
-        console.log(onEdit);
-        console.log(formStateContext);
         setFormState({
             id: "",
             soal: "",
@@ -63,7 +61,6 @@ const SoalInput = () => {
     }
 
     const SubmitSoal = () => {
-        console.log(formState);
         var soal = formState.soal;
         var url = formState.url;
         var hint = formState.hint;

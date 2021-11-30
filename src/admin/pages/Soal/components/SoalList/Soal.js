@@ -18,7 +18,6 @@ const Soal = ({ soal }) => {
         update: (cache) => {
           const existingSoal = cache.readQuery({ query: READ_SOAL }); 
           const soals = {soal: existingSoal.soal.filter((t) => t.soal_id !== soal_id)}
-          console.log(soals);
           cache.writeQuery({
             query: READ_SOAL,
             data: soals

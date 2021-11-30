@@ -19,6 +19,7 @@ const Login = () => {
         password: '',
         name: ''
     });
+
     const HandleInput = () => {
         data.user.forEach((k, v) => {
             if (k.user_username === formState.username && k.user_password === formState.password) {
@@ -49,7 +50,7 @@ const Login = () => {
     return (
 
         <>
-            <Container className="background h-100">
+            <Container className="h-100">
                 <Row className="mt-5 p-5">
                     <Col lg={5} md={6} sm={12} className="bg-white p-5 m-auto shadow-lg card-primer">
                         <h1 className="text-primer text-center">Akses Akun Anda</h1>
@@ -76,6 +77,7 @@ const Login = () => {
                                 Masuk
                             </Button>
                             <Link style={{ textDecoration: 'none' }} to="/user/login"><h5 className="text-dark text-center mt-3">Login Sebagai <span className="text-primer">Pengguna</span> </h5></Link>
+                            <Link style={{ textDecoration: 'none' }} to="/"><h5 className="text-secondary text-center mt-3">Kembali Ke Home</h5></Link>
                         </Form>
                     </Col>
                 </Row>

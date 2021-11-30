@@ -11,10 +11,8 @@ const SoalList = () => {
         return <div className="tasks">Loading...</div>;
     }
     if (error) {
-        console.log(error);
         return <div className="tasks">Error !</div>;
     }
-    console.log(data.soal);
     return (
         <div className="SoalList">
           {data.soal.map((soals) => (
