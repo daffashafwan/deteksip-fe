@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { READ_SOAL } from "../../../graphql/queries";
 import { useQuery } from "@apollo/client";
-import { Button, Col, Container, Row } from "react-bootstrap"
+import { Button, Col, Container, Row, ListGroup } from "react-bootstrap"
 import '../../../App.css';
 import Speech from './components/Speech';
 import Swal from "sweetalert2";
@@ -22,7 +22,7 @@ const Quiz = () => {
     const [showScore, setShowScore] = useState(false);
     const [start, setStart] = useState(false);
     const [score, setScore] = useState(0);
-    
+
     useEffect(() => {
         if (read_cookie('user_cred').length < 1) {
             navigate('/user/login');
@@ -31,7 +31,7 @@ const Quiz = () => {
             HandleAnswer(result)
         }
     });
-    
+
     const callbackFunction = (childData) => {
         setResult(childData);
     };
@@ -70,7 +70,14 @@ const Quiz = () => {
                     <Row className="mt-5">
                         <Col lg={5} md={6} sm={12} className="bg-white p-5 m-auto shadow-lg card-primer">
                             <Button className="text-center" onClick={HandleLogout} >Logout</Button>
-                            <h1 className="text-primer text-center">Quiz Menyenangkan</h1>
+                            <h1 className="text-primer text-center mt-4">Quiz Menyenangkan</h1>
+                            <ListGroup className="mt-4" as="ol" numbered>
+                                <ListGroup.Item as="li">Tekan tombol merah untuk menjawab</ListGroup.Item>
+                                <ListGroup.Item as="li">Ketika tombol sudah hijau, maka sedang mendengar</ListGroup.Item>
+                                <ListGroup.Item as="li">Klik tombol hijau untuk submit jawaban</ListGroup.Item>
+                                <ListGroup.Item as="li">Anda akan diberi 3x kesempatan setiap soal</ListGroup.Item>
+                                <ListGroup.Item as="li">Setiap soal memiliki hint (bantuan)</ListGroup.Item>
+                            </ListGroup>
                             <Button onClick={HandleStart} className="m-1 mt-5 text-white w-100" variant="success btn-block" type="submit">
                                 Mulai Quiz
                             </Button>
@@ -80,7 +87,7 @@ const Quiz = () => {
             </>
         );
     }
-    
+
     const HandleAnswer = (isCorrect) => {
         if (isCorrect === 'benar') {
             setScore(score + 1);
@@ -147,7 +154,7 @@ const Quiz = () => {
     } else {
         return (
             <>
-                
+
                 <Container className="h-100">
                     <Row className="mt-5 p-5">
                         <Col lg={5} md={6} sm={12} className="bg-white p-5 m-auto shadow-lg card-primer">
