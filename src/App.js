@@ -15,7 +15,7 @@ const App = () => {
         <Router>
           <Fragment>
             <Routes>
-            <Route exact path='/' element={<Landing />} />
+              <Route exact path='/' element={<Landing />} />
               <Route exact path='/admin/login' element={<LoginAdmin />} />
               <Route exact path='/user/login' element={<LoginUser />} />
               <Route exact path='/admin/soal' element={<SoalAdmin />} />

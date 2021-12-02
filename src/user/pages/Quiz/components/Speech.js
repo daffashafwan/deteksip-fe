@@ -102,7 +102,7 @@ class Speech extends Component {
     render() {
         return (
             <div style={container}>
-                <button id='microphone-btn' style={button} onClick={this.toggleListen} />
+                <button id='microphone-btn' style={this.state.listening ? button : button_onclick} onClick={this.toggleListen} />
                 <div id='interim' style={interim}></div>
                 <div id='final' style={final}></div>
             </div>
@@ -125,6 +125,13 @@ const styles = {
     button: {
         width: '60px',
         height: '60px',
+        background: 'green',
+        borderRadius: '50%',
+        margin: '6em 0 2em 0'
+    },
+    button_onclick: {
+        width: '60px',
+        height: '60px',
         background: 'red',
         borderRadius: '50%',
         margin: '6em 0 2em 0'
@@ -145,4 +152,4 @@ const styles = {
     }
 }
 
-const { container, button, interim, final } = styles
+const { container, button, interim, final, button_onclick } = styles

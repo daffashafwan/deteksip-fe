@@ -7,10 +7,12 @@ import Speech from './components/Speech';
 import Swal from "sweetalert2";
 import { useNavigate } from 'react-router-dom';
 import { read_cookie, delete_cookie } from 'sfcookies';
+import { useTour } from '@reactour/tour';
 
 
 const Quiz = () => {
     const navigate = useNavigate();
+    const { setIsOpen, ...rest } = useTour()
     const { loading, error, data } = useQuery(READ_SOAL);
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [result, setResult] = useState("");
@@ -20,6 +22,16 @@ const Quiz = () => {
     const [showScore, setShowScore] = useState(false);
     const [start, setStart] = useState(false);
     const [score, setScore] = useState(0);
+    
+    useEffect(() => {
+        if (read_cookie('user_cred').length < 1) {
+            navigate('/user/login');
+        }
+        if (result) {
+            HandleAnswer(result)
+        }
+    });
+    
     const callbackFunction = (childData) => {
         setResult(childData);
     };
@@ -37,15 +49,6 @@ const Quiz = () => {
             navigate('/user/login');
         }, 1500)
     };
-
-    useEffect(() => {
-        if (read_cookie('user_cred').length < 1) {
-            navigate('/user/login');
-        }
-        if (result) {
-            HandleAnswer(result)
-        }
-    });
 
     const HandleStart = () => {
         setStart(true);
@@ -77,6 +80,7 @@ const Quiz = () => {
             </>
         );
     }
+    
     const HandleAnswer = (isCorrect) => {
         if (isCorrect === 'benar') {
             setScore(score + 1);
@@ -99,6 +103,7 @@ const Quiz = () => {
             }
         }
     };
+
     const HandleHint = () => {
         var hint = data.soal[currentQuestion].soal_hint.split(';');
         console.log(hint);
@@ -142,15 +147,16 @@ const Quiz = () => {
     } else {
         return (
             <>
+                
                 <Container className="h-100">
                     <Row className="mt-5 p-5">
                         <Col lg={5} md={6} sm={12} className="bg-white p-5 m-auto shadow-lg card-primer">
                             <div className='question-section'>
                                 <div className="row">
-                                    <div className="col-4">
+                                    <div data-tour="step-3" className="col-4">
                                         <Button className="text-center" onClick={HandleLogout} >Logout</Button>
                                     </div>
-                                    <div className="col-4">
+                                    <div data-tour="step-1" className="col-4">
                                         <div className='question-count'>
                                             <span>Question {currentQuestion + 1}</span>/{data.soal.length}
                                         </div>
@@ -165,7 +171,7 @@ const Quiz = () => {
                                 <div className='question-text mt-5 text-center'><img alt="sabar" width="200" src={data.soal[currentQuestion].soal_url} /></div>
                                 {/* <div className='question-text'>{data.soal[currentQuestion].soal_soal}</div> */}
                             </div>
-                            <div className='answer-section'>
+                            <div data-tour="step-2" className='answer-section'>
                                 <Speech name={data.soal[currentQuestion].soal_soal} parentCallback={callbackFunction} />
                             </div>
                         </Col>
