@@ -6,16 +6,18 @@ import '../../../App.css';
 import Speech from './components/Speech';
 import Swal from "sweetalert2";
 import { useNavigate } from 'react-router-dom';
+//import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock";
 import { read_cookie, delete_cookie } from 'sfcookies';
-import { useTour } from '@reactour/tour';
-
+//import { useTour } from '@reactour/tour';
+//import Tour from "reactour";
 
 const Quiz = () => {
     const navigate = useNavigate();
-    const { setIsOpen, ...rest } = useTour()
+    //const { setIsOpen, ...rest } = useTour()
     const { loading, error, data } = useQuery(READ_SOAL);
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [result, setResult] = useState("");
+    const [isTourOpen, setIsTourOpen] = useState(false);
     const [counter, setCounter] = useState(0);
     const [hintIndex, setHintIndex] = useState(0);
     const [hintDisabled, setHintDisabled] = useState(false);
@@ -32,9 +34,20 @@ const Quiz = () => {
         }
     });
 
+    //var disableBody = target => disableBodyScroll(target);
+    //var enableBody = target => enableBodyScroll(target);
+
     const callbackFunction = (childData) => {
         setResult(childData);
     };
+
+    // const openTour = () => {
+    //     setIsTourOpen(true)
+    // }
+
+    // const closeTour = () => {
+    //     setIsTourOpen(false)
+    // }
 
     const HandleLogout = () => {
         delete_cookie('user_cred');
@@ -52,6 +65,7 @@ const Quiz = () => {
 
     const HandleStart = () => {
         setStart(true);
+        //openTour();
     }
 
     const HandleRestart = () => {
@@ -87,6 +101,21 @@ const Quiz = () => {
             </>
         );
     }
+
+    // const tourConfig = [
+    //     {
+    //       selector: '[data-tour="step-1"]',
+    //       content: <p>Lorem ipsum dolor sit amet</p>,
+    //     },
+    //     {
+    //       selector: '[data-tour="step-2"]',
+    //       content: <p>consectetur adipiscing elit</p>,
+    //     },
+    //     {
+    //       selector: '[data-tour="step-3"]',
+    //       content: <p>Vivamus sed dui nisi</p>,
+    //     },
+    //   ]
 
     const HandleAnswer = (isCorrect) => {
         if (isCorrect === 'benar') {
@@ -152,41 +181,52 @@ const Quiz = () => {
             </>
         );
     } else {
+        //const accentColor = "#5cb7b7";
         return (
             <>
-
-                <Container className="h-100">
-                    <Row className="mt-5 p-5">
-                        <Col lg={5} md={6} sm={12} className="bg-white p-5 m-auto shadow-lg card-primer">
-                            <div className='question-section'>
-                                <div className="row">
-                                    <div data-tour="step-3" className="col-4">
-                                        <Button className="text-center" onClick={HandleLogout} >Logout</Button>
-                                    </div>
-                                    <div data-tour="step-1" className="col-4">
-                                        <div className='question-count'>
-                                            <span>Question {currentQuestion + 1}</span>/{data.soal.length}
+                {/* <Tour
+                    onRequestClose={closeTour}
+                    steps={tourConfig}
+                    isOpen={isTourOpen}
+                    maskClassName="mask"
+                    className="helper"
+                    rounded={5}
+                    accentColor={accentColor}
+                    onAfterOpen={disableBody}
+                    onBeforeClose={enableBody}> */}
+                    <Container className="h-100">
+                        <Row className="mt-5 p-5">
+                            <Col lg={5} md={6} sm={12} className="bg-white p-5 m-auto shadow-lg card-primer">
+                                <div className='question-section'>
+                                    <div className="row">
+                                        <div data-tour="step-3" className="col-4">
+                                            <Button className="text-center" onClick={HandleLogout} >Logout</Button>
                                         </div>
-                                        <div className='question-count'>
-                                            <span>Attempt {counter + 1}</span>/3
+                                        <div data-tour="step-1" className="col-4">
+                                            <div className='question-count'>
+                                                <span>Question {currentQuestion + 1}</span>/{data.soal.length}
+                                            </div>
+                                            <div className='question-count'>
+                                                <span>Attempt {counter + 1}</span>/3
+                                            </div>
+                                        </div>
+                                        <div className="col-4">
+                                            <Button onClick={HandleHint} className={hintDisabled ? `text-center btn-hint disabled` : `text-center btn-hint`} variant="warning">Hint</Button>
                                         </div>
                                     </div>
-                                    <div className="col-4">
-                                        <Button onClick={HandleHint} className={hintDisabled ? `text-center btn-hint disabled` : `text-center btn-hint`} variant="warning">Hint</Button>
-                                    </div>
+                                    <div className='question-text mt-5 text-center'><img alt="sabar" width="200" src={data.soal[currentQuestion].soal_url} /></div>
+                                    {/* <div className='question-text'>{data.soal[currentQuestion].soal_soal}</div> */}
                                 </div>
-                                <div className='question-text mt-5 text-center'><img alt="sabar" width="200" src={data.soal[currentQuestion].soal_url} /></div>
-                                {/* <div className='question-text'>{data.soal[currentQuestion].soal_soal}</div> */}
-                            </div>
-                            <div data-tour="step-2" className='answer-section'>
-                                <Speech name={data.soal[currentQuestion].soal_soal} parentCallback={callbackFunction} />
-                            </div>
-                        </Col>
-                    </Row>
-                </Container>
+                                <div data-tour="step-2" className='answer-section'>
+                                    <Speech name={data.soal[currentQuestion].soal_soal} parentCallback={callbackFunction} />
+                                </div>
+                            </Col>
+                        </Row>
+                    </Container>
+                {/* </Tour> */}
             </>
-        );
+                );
     }
 }
 
-export default Quiz;
+                export default Quiz;
