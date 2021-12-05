@@ -74,6 +74,7 @@ const Login = () => {
                             <Button onClick={HandleInput} className="m-1 mt-5 btn-primer text-white w-100" variant="btn-block">
                                 Masuk
                             </Button>
+                            <Link style={{ textDecoration: 'none' }} to="/user/register"><h5 className="text-primer text-center mt-3">Belum Punya Akun ? Register</h5></Link>
                             <Link style={{ textDecoration: 'none' }} to="/admin/login"><h5 className="text-dark text-center mt-3">Login Sebagai <span className="text-primer">Admin</span> </h5></Link>
                             <Link style={{ textDecoration: 'none' }} to="/"><h5 className="text-secondary text-center mt-3">Kembali Ke Home</h5></Link>
                         </Form>

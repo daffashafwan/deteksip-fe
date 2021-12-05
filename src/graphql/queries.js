@@ -87,3 +87,16 @@ export const READ_CHILD = gql`
     }
   }
 `
+
+export const CREATE_CHILD = gql`
+mutation($nama: String!, $username: String!, $password: String!) {
+  insert_child(objects: {child_nama: $nama, child_password: $password, child_username: $username}) {
+    affected_rows
+    returning {
+      child_id
+      child_nama
+      child_password
+      child_username
+    }
+  }
+}`
